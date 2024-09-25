@@ -1,0 +1,132 @@
+actions:
+  send_email:
+    description: "Send an email to a contact"
+    synonyms: [
+      "send email", "send an email", "compose email", "write email", "email someone",
+      "create email", "draft email", "prepare email", "craft email", "generate email",
+      "start new email", "initiate email", "begin email", "make email",
+      "send message via email", "email a contact", "reach out via email",
+      "dispatch email", "transmit email", "forward email", "shoot an email",
+      "drop an email", "fire off an email", "ping someone by email",
+      "communicate via email", "contact through email", "get in touch by email",
+      "send electronic mail", "compose electronic message", "write electronic letter"
+    ]
+    parameters:
+      - name: "contact_name"
+        type: "string"
+        required: true
+        prompt: "Who are you sending the email to?"
+      - name: "confirm_contact"
+        type: "string"
+        required: true
+        prompt: "Is {contact_name} the correct recipient? (yes/no)"
+      - name: "email_subject"
+        type: "string"
+        required: true
+        prompt: "What is the subject of the email?"
+      - name: "email_body"
+        type: "string"
+        required: true
+        prompt: "What is the content of the email?"
+    confirmation: "I'm about to send an email to {contact_name} with subject '{email_subject}' and content '{email_body}'. Do you want to send this email now? (yes/no)"
+
+  confirm_email:
+    description: "Confirm the email content before sending"
+    parameters:
+      - name: "confirmation"
+        type: "string"
+        required: true
+        prompt: "Do you want to send this email? (yes/no)"
+
+  create_task:
+    description: "Create a new task for a contact"
+    synonyms: [
+      "new task", "add task", "create task", "schedule task", "assign task",
+      "set up task", "plan task", "organize task", "establish task",
+      "initiate task", "start task", "begin task", "make task",
+      "put task on calendar", "add to-do", "create to-do item"
+    ]
+    parameters:
+      - name: "contact_name"
+        type: "string"
+        required: true
+        prompt: "Who is this task for?"
+      - name: "confirm_contact"
+        type: "string"
+        required: true
+        prompt: "Is {contact_name} the correct contact for this task? (yes/no)"
+      - name: "task_title"
+        type: "string"
+        required: true
+        prompt: "What is the title of the task?"
+      - name: "task_body"
+        type: "string"
+        required: true
+        prompt: "What is the description of the task?"
+      - name: "due_date"
+        type: "string"
+        required: true
+        prompt: "When is the task due? (YYYY-MM-DD)"
+    confirmation: "I'm about to create a task titled '{task_title}' for {contact_name}, due on {due_date}. Do you want to create this task now? (yes/no)"
+
+  generate_note:
+    description: "Generate a note using AI and associate it with a contact"
+    synonyms: [
+      "create note", "write note", "compose note", "draft note", "prepare note",
+      "jot down note", "make note", "record note", "produce note",
+      "generate AI note", "create AI-assisted note", "get AI to write a note"
+    ]
+    parameters:
+      - name: "contact_name"
+        type: "string"
+        required: true
+        prompt: "Which contact is this note for?"
+      - name: "confirm_contact"
+        type: "string"
+        required: true
+        prompt: "Is {contact_name} the correct contact for this note? (yes/no)"
+      - name: "note_prompt"
+        type: "string"
+        required: true
+        prompt: "What should the note be about?"
+    confirmation: "I'm about to generate a note for {contact_name} based on the prompt: '{note_prompt}'. Do you want to proceed? (yes/no)"
+
+  generate_sms:
+    description: "Generate an SMS message using AI and send it to a contact"
+    synonyms: [
+      "create SMS", "write SMS", "compose SMS", "draft SMS", "prepare SMS",
+      "generate text message", "create text", "write text message",
+      "generate AI SMS", "create AI-assisted SMS", "get AI to write an SMS"
+    ]
+    parameters:
+      - name: "contact_name"
+        type: "string"
+        required: true
+        prompt: "Who are you sending this SMS to?"
+      - name: "confirm_contact"
+        type: "string"
+        required: true
+        prompt: "Is {contact_name} the correct recipient for this SMS? (yes/no)"
+      - name: "sms_prompt"
+        type: "string"
+        required: true
+        prompt: "What should the SMS message be about?"
+    confirmation: "I'm about to generate an SMS message for {contact_name} based on the prompt: '{sms_prompt}'. Do you want to proceed? (yes/no)"
+
+  get_contact:
+    description: "Retrieve information about a contact"
+    synonyms: [
+      "find contact", "lookup contact", "search for contact", "get contact info",
+      "retrieve contact details", "fetch contact data", "access contact information",
+      "view contact", "check contact details", "inquire about contact"
+    ]
+    parameters:
+      - name: "contact_identifier"
+        type: "string"
+        required: true
+        prompt: "What is the name or ID of the contact you want to look up?"
+      - name: "confirm_contact"
+        type: "string"
+        required: true
+        prompt: "Is '{contact_identifier}' the correct contact you want to look up? (yes/no)"
+    confirmation: "I'm about to retrieve information for the contact: '{contact_identifier}'. Do you want to proceed? (yes/no)"

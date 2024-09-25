@@ -1,0 +1,70 @@
+.suggestions-container {
+    position: absolute;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--accent-color);
+    width: 100%;
+    max-width: 300px;
+    z-index: 1001;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 0.5rem;
+    padding: 0;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    display: none;
+    border-radius: 0.25rem;
+}
+
+.suggestions-container.visible {
+    display: block;
+}
+
+.suggestions-container div {
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.suggestions-container div:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-bg);
+}
+
+.aisuggestions-container {
+    position: absolute;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--accent-color);
+    max-height: 200px;
+    overflow-y: auto;
+    width: calc(100% - 2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: none; /* Hide by default */
+}
+
+.aisuggestions-container:not(:empty) {
+    display: block; /* Show only when not empty */
+}
+
+.aisuggestions-container div {
+    padding: 10px;
+    cursor: pointer;
+    color: var(--text-color); /* Ensure text color matches other suggestions */
+}
+
+.aisuggestions-container div:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-bg);
+}
+
+@media screen and (max-width: 480px) {
+    .suggestions-container,
+    .aisuggestions-container {
+        font-size: 0.875rem;
+    }
+
+    .suggestions-container div,
+    .aisuggestions-container div {
+        padding: 0.375rem;
+    }
+}

@@ -1,0 +1,96 @@
+.bot-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--accent-color);
+    position: relative;
+    transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-icon-container {
+    background-color: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.ai-icon-container:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px -1px rgb(56 189 248 / 0.5), 0 2px 4px -2px rgb(56 189 248 / 0.5);
+}
+
+.ai-form-container input,
+.ai-form-container select,
+.ai-form-container button {
+    display: block;
+    margin: 0.75rem 0;
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 0.5rem;
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-form-container input:focus,
+.ai-form-container select:focus,
+.ai-form-container button:focus {
+    border-color: var(--hover-color);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+    outline: none;
+}
+
+.clear-email-button {
+    background-color: var(--accent-color);
+    color: var(--primary-bg);
+    border: none;
+    padding: 0.625rem 1.25rem;
+    cursor: pointer;
+    border-radius: 9999px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: auto;
+}
+
+.clear-email-button:hover {
+    background-color: var(--hover-color);
+    box-shadow: 0 4px 6px -1px rgb(56 189 248 / 0.5), 0 2px 4px -2px rgb(56 189 248 / 0.5);
+    transform: translateY(-2px);
+}
+
+@media screen and (max-width: 768px) {
+    .ai-icon-container {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .bot-icon {
+        font-size: 1.25rem;
+    }
+
+    .ai-form-container input,
+    .ai-form-container select,
+    .ai-form-container button {
+        font-size: 0.875rem;
+        padding: 0.5rem;
+    }
+
+    .clear-email-button {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+}

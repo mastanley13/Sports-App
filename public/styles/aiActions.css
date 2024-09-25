@@ -1,0 +1,146 @@
+
+/* Modal Styles (Email, SMS, Note) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #0A192F;
+    border: 1px solid #64FFDA;
+    padding: 20px;
+    z-index: 1003;
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+    border-radius: 15px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: #FFFFFF;
+}
+
+.modal .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #64FFDA;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal .close:hover {
+    color: #FF00FF;
+}
+
+.modal h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #64FFDA;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.modal label {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+
+.modal input,
+.modal textarea {
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #112240;
+    border: 1px solid #64FFDA;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #FFFFFF;
+    box-sizing: border-box;
+}
+
+.modal button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #64FFDA;
+    color: #0A192F;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    font-family: 'Orbitron', sans-serif;
+    display: block;
+    width: 100%;
+}
+
+.modal button:hover {
+    background-color: #FF00FF;
+    color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+}
+
+/* Contact Suggestions */
+.contact-suggestions {
+    display: none;
+    position: absolute;
+    background-color: #112240;
+    border: 1px solid #64FFDA;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1004;
+    width: calc(100% - 20px);
+    box-shadow: 0 4px 8px rgba(100, 255, 218, 0.2);
+    border-radius: 8px;
+}
+
+.contact-suggestions.visible {
+    display: block;
+}
+
+.contact-suggestions div {
+    padding: 10px;
+    cursor: pointer;
+    color: #FFFFFF;
+    transition: background-color 0.3s ease;
+}
+
+.contact-suggestions div:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+}
+
+/* Hidden input field */
+.hidden-input {
+    display: none;
+    font-size: 12px;
+    color: #64FFDA;
+    margin-bottom: 10px;
+}
+
+.hidden-label {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .modal {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .modal h2 {
+        font-size: 20px;
+    }
+
+    .modal input,
+    .modal textarea {
+        font-size: 14px;
+    }
+
+    .modal button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

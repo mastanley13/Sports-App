@@ -1,0 +1,134 @@
+:root {
+    --primary-bg: #0f172a;
+    --secondary-bg: #1e293b;
+    --accent-color: #38bdf8;
+    --text-color: #f1f5f9;
+    --hover-color: #0ea5e9;
+}
+
+.task-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.task-buttons button,
+.ai-button {
+    background-color: transparent;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--accent-color);
+}
+
+.task-buttons button:hover,
+.ai-button:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-bg);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px -1px rgb(56 189 248 / 0.5), 0 3px 6px -2px rgb(56 189 248 / 0.5);
+}
+
+#chatForm button,
+#contactChatForm button,
+.clear-chat-button,
+#voiceCommandModal button {
+    background-color: var(--accent-color);
+    color: var(--primary-bg);
+    border: none;
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 9999px;
+}
+
+#chatForm button:hover,
+#contactChatForm button:hover,
+.clear-chat-button:hover,
+#voiceCommandModal button:hover {
+    background-color: var(--hover-color);
+    box-shadow: 0 4px 6px -1px rgb(56 189 248 / 0.5), 0 2px 4px -2px rgb(56 189 248 / 0.5);
+    transform: translateY(-2px);
+}
+
+#contactChatForm {
+    display: flex;
+    gap: 10px;
+}
+
+#contactChatInput {
+    flex: 1;
+    padding: 0.625rem;
+    font-size: 1rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 9999px;
+    outline: none;
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+}
+
+.clear-chat-button {
+    background-color: #ff4d4d;
+    margin-top: 10px;
+}
+
+.clear-chat-button:hover {
+    background-color: #cc0000;
+}
+
+@media (max-width: 768px) {
+    .task-buttons button,
+    .ai-button {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.5rem;
+    }
+
+    #chatForm button,
+    #contactChatForm button,
+    .clear-chat-button,
+    #voiceCommandModal button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    #contactChatInput {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .task-buttons button,
+    .ai-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.25rem;
+    }
+
+    #chatForm button,
+    #contactChatForm button,
+    .clear-chat-button,
+    #voiceCommandModal button {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+
+    #contactChatInput {
+        padding: 0.625rem;
+        font-size: 0.875rem;
+    }
+}

@@ -1,0 +1,23 @@
+:root {
+    --primary-bg: #0f172a;
+    --secondary-bg: #1e293b;
+    --text-color: #f1f5f9;
+    --accent-color: #38bdf8;
+    --hover-color: #0ea5e9;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    font-size: 16px; /* Base font size for mobile */
+}
+
+@media screen and (min-width: 768px) {
+    body {
+        font-size: 18px; /* Slightly larger font for desktop */
+    }
+}

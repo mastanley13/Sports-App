@@ -1,0 +1,147 @@
+.search-modal {
+    display: none; /* Hide by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 40px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-card-modal .modal-content {
+    display: none;
+    background-color: var(--secondary-bg);
+    margin: auto;
+    top: 40px;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 70%;
+    max-width: 1200px;
+    height: 80vh;
+    max-height: 800px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.contact-card-modal .close {
+    color: var(--accent-color);
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.contact-card-modal .close:hover {
+    color: var(--hover-color);
+}
+
+.modal-half {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.left-half {
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.right-half {
+    background-color: var(--primary-bg);
+}
+
+/* Media query for tablets and larger screens */
+@media screen and (min-width: 768px) {
+    .contact-card-modal .modal-content {
+        flex-direction: row;
+    }
+
+    .modal-half {
+        width: 50%;
+    }
+
+    .left-half {
+        border-bottom: none;
+        border-right: 1px solid var(--accent-color);
+    }
+}
+
+/* Adjust font sizes for better readability */
+.contact-card-modal h2 {
+    font-size: 1.2rem;
+    margin-top: 0;
+    color: var(--accent-color);
+}
+
+#contactInfo p, #contactTasks p {
+    font-size: 0.9rem;
+    margin: 0.5em 0;
+}
+
+/* Responsive adjustments for task elements */
+#contactTasks .task {
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+/* Adjust button sizes for better touch targets */
+.contact-card-ai-button,
+.contact-card-edit-button,
+.contact-card-delete-button,
+.contact-card-complete-button,
+.contact-card-contact-button,
+.contact-card-email-template-button {
+    padding: 8px 12px;
+    margin: 5px 3px;
+    font-size: 0.9rem;
+}
+
+/* Additional media query for larger desktop screens */
+@media screen and (min-width: 1200px) {
+    .contact-card-modal .modal-content {
+        width: 80%;
+    }
+
+    .contact-card-modal h2 {
+        font-size: 1.5rem;
+    }
+
+    #contactInfo p, #contactTasks p {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .contact-card-modal .modal-content {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .contact-card-modal h2 {
+        font-size: 1rem;
+    }
+
+    #contactInfo p, #contactTasks p {
+        font-size: 0.8rem;
+    }
+
+    .contact-card-ai-button,
+    .contact-card-edit-button,
+    .contact-card-delete-button,
+    .contact-card-complete-button,
+    .contact-card-contact-button,
+    .contact-card-email-template-button {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}

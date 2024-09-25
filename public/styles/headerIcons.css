@@ -1,0 +1,162 @@
+.ai-icon-container {
+    background-color: transparent;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1001;
+    margin: 0 0.5rem;
+    cursor: pointer;
+}
+
+.ai-icon-container button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-icon-container:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px -1px rgb(56 189 248 / 0.5), 0 3px 6px -2px rgb(56 189 248 / 0.5);
+}
+
+.ai-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--accent-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ai-icon i {
+    font-size: 24px;
+}
+
+.ai-icon-container:hover .ai-icon {
+    color: var(--primary-bg);
+}
+
+.ai-icon-container::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition */
+    z-index: 1002;
+}
+
+.ai-icon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition */
+    z-index: 1002;
+}
+
+.ai-icon-container:hover::after {
+    opacity: 1;
+    visibility: visible;
+    top: calc(100% + 0.5rem); /* Adjusted to create space between the button and tooltip */
+    overflow: visible;
+}
+
+.ai-features {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0;
+    width: auto;
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: 1000;
+}
+
+/* Remove this media query as it's causing issues on mobile */
+/* @media (max-width: 768px) {
+    .ai-features {
+        top: 60px;
+        left: 10px;
+        margin-top: 10px;
+    }
+} */
+
+@media screen and (max-width: 768px) {
+    .ai-features {
+        justify-content: center;
+        margin-top: 0.9rem;
+    }
+
+    .ai-icon-container {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .ai-icon {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .ai-icon-container::after,
+    .ai-icon::after {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+:root {
+    --accent-color: #38bdf8;
+    --primary-bg: #0f172a;
+    --secondary-bg: #1e293b;
+    --text-color: #f1f5f9;
+}
+
+@media screen and (max-width: 480px) {
+    .ai-icon-container {
+    width: 2rem;
+    height: 2rem;
+    }
+    .ai-icon {
+    width: 1rem;
+    height: 1rem;
+    }
+    .ai-icon-container::after,
+    .ai-icon::after {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    }
+}

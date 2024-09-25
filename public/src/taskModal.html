@@ -1,0 +1,26 @@
+<button id="addTaskBtn">Add Task</button>
+<div id="addTaskModal" class="modal add-task-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle">Add New Task</h2>
+        <form id="newTaskForm">
+            <input type="hidden" id="taskId" name="taskId">
+            <label for="taskIdVisible" class="task-id-label">Task ID:</label>
+            <input type="text" id="taskIdVisible" name="taskIdVisible" readonly class="task-id-input">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+            <label for="dueDate">Due Date:</label>
+            <input type="date" id="dueDate" name="dueDate" required>
+            <label for="contactFirstName">Contact First Name:</label>
+            <input type="text" id="contactFirstName" name="contactFirstName" required>
+            <label for="contactLastName">Contact Last Name:</label>
+            <input type="text" id="contactLastName" name="contactLastName" required>
+            <label for="contactId" class="contact-id-label">Contact ID for Submission:</label>
+            <input type="text" id="contactId" name="contactId" readonly class="contact-id-input">
+            <div id="contactSuggestions" class="suggestions-container"></div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+            <button type="submit">Save Task</button>
+        </form>
+    </div>
+</div>

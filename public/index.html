@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Dashboard</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://storage.googleapis.com/msgsndr/8lQAYS7QatKYV3ENYdl1/media/669d8f3afe542b7be0510dac.png" type="image/png">
+    <script defer type="module" src="dashboard.js"></script>
+    <script defer type="module" src="chatbot.js"></script>
+    <script defer type="module" src="contactChatbot.js"></script>
+    <script defer type="module" src="/js/contactCard.js"></script>
+    <script defer type="module" src="createContactForm.js"></script>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="microphone-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.25 4.5a3.75 3.75 0 117.5 0v8.25a3.75 3.75 0 11-7.5 0V4.5z" />
+            <path d="M6 10.5a.75.75 0 01.75.75v1.5a5.25 5.25 0 1010.5 0v-1.5a.75.75 0 011.5 0v1.5a6.751 6.751 0 01-6 6.709v2.291h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3v-2.291a6.751 6.751 0 01-6-6.709v-1.5A.75.75 0 016 10.5z" />
+        </symbol>
+        <symbol id="search-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.25 10.875a2.625 2.625 0 115.25 0 2.625 2.625 0 01-5.25 0z" />
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.125 4.5a4.125 4.125 0 102.338 7.524l2.007 2.006a.75.75 0 101.06-1.06l-2.006-2.007a4.125 4.125 0 00-3.399-6.463z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="chatbot-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
+        </symbol>
+    </svg>
+    <div class="container">
+        <header class="main-header">
+            <div class="header desktop-header">
+                <h1 class="dashboard-title">
+                    <span class="tech-text">Task</span>
+                    <span class="modern-text">Dashboard</span>
+                </h1>
+                <div class="header-buttons">
+                    <button id="addTaskBtn" class="add-task-button">Add Task</button>
+                    <div class="dropdown">
+                        <button id="addContactBtn" class="add-contact-button">Add Contact</button>
+                    </div>
+                    <div class="dropdown">
+                        <button id="aiAction" class="ai-action-button">AI Action</button>
+                        <div id="aiDropdown" class="dropdown-content">
+                            <strong>Have AI Craft Your...</strong>
+                            <ul>
+                                <li><a href="#" id="craftEmail">Email</a></li>
+                                <li><a href="#" id="craftSMS">SMS</a></li>
+                                <li><a href="#" id="craftNote">Note</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="ai-features">
+                    <div class="ai-icon-container" data-tooltip="Voice Assistant">
+                        <button id="voiceCommandButton" class="ai-icon">
+                            <svg><use href="#microphone-icon"/></svg>
+                        </button>
+                    </div>
+                    <div class="ai-icon-container" data-tooltip="AI-Powered Contact Search">
+                        <button id="searchButton" class="ai-icon">
+                            <svg><use href="#search-icon"/></svg>
+                        </button>
+                    </div>
+                    <div class="ai-icon-container" data-tooltip="AIAssistant">
+                        <button id="chatbotButton" class="ai-icon">
+                            <i class="fas fa-robot"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="header mobile-header">
+                <h1 class="dashboard-title">
+                    <span class="tech-text">Task</span>
+                    <span class="modern-text">Dashboard</span>
+                </h1>
+                <div class="mobile-buttons">
+                    <button id="mobileMenuBtn" class="mobile-menu-button">Menu</button>
+                </div>
+                <div class="ai-features">
+                    <div class="ai-icon-container" data-tooltip="Voice Assistant">
+                        <button id="mobileVoiceCommandButton" class="ai-icon">
+                            <svg><use href="#microphone-icon"/></svg>
+                        </button>
+                    </div>
+                    <div class="ai-icon-container" data-tooltip="AI-Powered Contact Search">
+                        <button id="mobileSearchButton" class="ai-icon">
+                            <svg><use href="#search-icon"/></svg>
+                        </button>
+                    </div>
+                    <div class="ai-icon-container" data-tooltip="AIAssistant">
+                        <button id="mobileChatbotButton" class="ai-icon">
+                            <i class="fas fa-robot"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="mobileMenu" class="mobile-menu">
+                <button id="mobileAddTaskBtn" class="mobile-button">Add Task</button>
+                <button id="mobileAddContactBtn" class="mobile-button">Add Contact</button>
+                <button id="mobileAiActionBtn" class="mobile-button">AI Action</button>
+                <div id="mobileAiDropdown" class="mobile-dropdown-content">
+                    <strong>Have AI Craft Your...</strong>
+                    <ul>
+                        <li><a href="#" id="mobileCraftEmail" class="craft-email">Email</a></li>
+                        <li><a href="#" id="mobileCraftSMS" class="craft-sms">SMS</a></li>
+                        <li><a href="#" id="mobileCraftNote" class="craft-note">Note</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="main-content">
+            <div id="searchContainer" class="search-container">
+                <input type="text" id="searchInput" placeholder="Search Contacts...">
+                <button id="searchSubmitButton">Search</button>
+            </div>
+            <div id="loadingIndicator" class="loading-indicator" style="display:none;">Loading...</div>
+            <div class="dashboard">
+                <div class="column">
+                    <h2 class="column-title" data-title="Overdue">Overdue <span class="task-count"></span></h2>
+                    <div class="task-list-container" id="overdue">
+                        <div class="task-list"></div>
+                    </div>
+                </div>
+                <div class="column">
+                    <h2 class="column-title" data-title="Today's Tasks">Today's Tasks <span class="task-count"></span></h2>
+                    <div class="task-list-container" id="today">
+                        <div class="task-list"></div>
+                    </div>
+                </div>
+                <div class="column">
+                    <h2 class="column-title" data-title="Tomorrow's Tasks">Tomorrow's Tasks <span class="task-count"></span></h2>
+                    <div class="task-list-container" id="tomorrow">
+                        <div class="task-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            <!-- The Task Modal -->
+            <div id="addTaskModal" class="modal add-task-modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 id="modalTitle">Add New Task</h2>
+                    <form id="newTaskForm">
+                        <input type="hidden" id="taskId" name="taskId">
+                        <label for="taskIdVisible" class="task-id-label">Task ID:</label>
+                        <input type="text" id="taskIdVisible" name="taskIdVisible" readonly class="task-id-input">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required>
+                        <label for="dueDate">Due Date:</label>
+                        <input type="date" id="dueDate" name="dueDate" required>
+                        <label for="contactFirstName">Contact First Name:</label>
+                        <input type="text" id="contactFirstName" name="contactFirstName" required>
+                        <label for="contactLastName">Contact Last Name:</label>
+                        <input type="text" id="contactLastName" name="contactLastName" required>
+                        <label for="contactId" class="contact-id-label">Contact ID for Submission:</label>
+                        <input type="text" id="contactId" name="contactId" readonly class="contact-id-input">
+                        <div id="contactSuggestions" class="suggestions-container"></div>
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" required></textarea>
+                        <button type="submit">Save Task</button>
+                    </form>
+                </div>
+            </div>
+            <!-- The Chatbot Modal -->
+            <div id="chatbotModal" class="modal chatbot-modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>StrategixAI Assistant</h2>
+                    <div id="chatHistory" class="chat-history"></div>
+                    <form id="chatForm">
+                        <input type="text" id="chatInput" placeholder="Type your message..." required>
+                        <button type="submit">Send</button>
+                    </form>
+                    <button id="clearChatBtn" class="clear-chat-button">Clear Chat | Start New Chat</button>
+                </div>
+            </div>
+            <!-- The Contact Chatbot Modal -->
+            <div id="contactChatbotModal" class="modal chatbot-modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>StrategixAI<br> Contact & Task Assistant</h2>
+                    <div id="contactChatHistory" class="chat-history"></div>
+                    <form id="contactChatForm">
+                        <input type="text" id="contactChatInput" placeholder="Type your message..." required>
+                        <button type="submit">Send</button>
+                    </form>
+                    <button id="clearContactChatBtn" class="clear-chat-button">Clear Chat | Start New Chat</button>
+                </div>
+            </div>
+            <!-- The Voice Command Modal -->
+            <div id="voiceCommandModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="voiceChatHistory" class="chat-history"></div>
+                    <button id="startRecordingBtn">Start Recording</button>
+                    <button id="stopRecordingBtn" style="display: none;">Stop Recording</button>
+                    <button id="stopPlaybackBtn" class="stop-playback-btn" style="display: none;">Stop Playback</button>
+                    <button id="clearVoiceChatBtn">Clear Chat</button>
+                </div>
+            </div>
+            <!-- The Email Modal -->
+            <div id="emailModal" class="modal email-modal">
+                <span class="close" id="closeEmailModal">&times;</span>
+                <h2>Send Email</h2>
+                <label for="emailContactId" class="hidden-label">Contact ID:</label>
+                <input type="text" id="emailContactId" class="hidden-input" readonly><br>
+                <label for="emailcontactFirstName">Contact First Name:</label>
+                <input type="text" id="emailcontactFirstName"><br>
+                <div id="emailContactSuggestions" class="contact-suggestions"></div>
+                <label for="emailcontactLastName">Contact Last Name:</label>
+                <input type="text" id="emailcontactLastName"><br>
+                <label for="emailSubject">Subject:</label>
+                <input type="text" id="emailSubject"><br>
+                <label for="emailBody">Body:</label>
+                <textarea id="emailBody"></textarea><br>
+                <button id="sendEmail">Send</button>
+            </div>
+            <!-- The SMS Modal -->
+            <div id="smsModal" class="modal sms-modal">
+                <span class="close" id="closeSmsModal">&times;</span>
+                <h2>Send SMS</h2>
+                <label for="smsContactId" class="hidden-label">Contact ID:</label>
+                <input type="text" id="smsContactId" class="hidden-input" readonly><br>
+                <label for="smsContactFirstName">Contact First Name:</label>
+                <input type="text" id="smsContactFirstName"><br>
+                <div id="smsContactSuggestions" class="contact-suggestions"></div> <!-- Suggestions container -->
+                <label for="smsContactLastName">Contact Last Name:</label>
+                <input type="text" id="smsContactLastName"><br>
+                <label for="smsBody">Body:</label>
+                <textarea id="smsBody"></textarea><br>
+                <button id="createSms">Send</button>
+            </div>
+            <!-- The Note Modal -->
+            <div id="noteModal" class="modal note-modal">
+                <span class="close" id="closeNoteModal">&times;</span>
+                <h2>Add Note</h2>
+                <label for="noteContactId" class="hidden-label">Contact ID:</label>
+                <input type="text" id="noteContactId" class="hidden-input" readonly><br>
+                <label for="noteContactFirstName">Contact First Name:</label>
+                <input type="text" id="noteContactFirstName"><br>
+                <div id="noteContactSuggestions" class="contact-suggestions"></div> <!-- Suggestions container -->
+                <label for="noteContactLastName">Contact Last Name:</label>
+                <input type="text" id="noteContactLastName"><br>
+                <label for="noteBody">Note:</label>
+                <textarea id="noteBody"></textarea><br>
+                <button id="addNote">Add Note</button>
+            </div>
+        </div>
+    </div>
+    <!-- The Contact Card Modal -->
+<div id="contactCardModal" class="search-modal contact-card-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Contact Info & Tasks</h2>
+        <div id="contactInfo"></div>
+        <div id="contactTasks"></div>
+    </div>
+</div>
+<div id="emailTemplateModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Email Template</h2>
+        <select id="emailTemplateSelect">
+            <!-- Options will be populated here -->
+        </select>
+        <input type="text" id="emailTemplateContactName" placeholder="Contact Name" readonly>
+        <input type="text" id="emailTemplateContactId" placeholder="Contact ID" readonly style="display: none;">
+        <input type="text" id="emailTemplateSubject" placeholder="Subject">
+        <textarea id="emailTemplateBody" placeholder="Email body" style="width: 535px;height: 400px;"></textarea>
+        <button id="sendEmailButton">Send Email</button>
+        <button id="clearEmailButton">Clear</button>
+    </div>
+</div>
+
+<div id="addContactModal" class="modal add-contact-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Contact</h2>
+        <form id="newContactForm">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required>
+            
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone">
+            
+            <label for="address1">Street Address:</label>
+            <input type="text" id="address1" name="address1" required>
+            
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city">
+            
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state">
+            
+            <label for="postalCode">Postal Code:</label>
+            <input type="text" id="postalCode" name="postalCode">
+            
+            <button type="submit">Add Contact</button>
+        </form>
+    </div>
+</div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileAddTaskBtn = document.getElementById('mobileAddTaskBtn');
+        const mobileAddContactBtn = document.getElementById('mobileAddContactBtn');
+        const mobileAiActionBtn = document.getElementById('mobileAiActionBtn');
+        const mobileAiDropdown = document.getElementById('mobileAiDropdown');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+        });
+
+        mobileAddTaskBtn.addEventListener('click', function() {
+            document.getElementById('addTaskBtn').click();
+            mobileMenu.classList.remove('active');
+        });
+
+        mobileAddContactBtn.addEventListener('click', function() {
+            document.getElementById('addContactBtn').click();
+            mobileMenu.classList.remove('active');
+        });
+
+        mobileAiActionBtn.addEventListener('click', function(event) {
+            event.stopPropagation();
+            mobileAiDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+            }
+            if (!mobileAiActionBtn.contains(event.target) && !mobileAiDropdown.contains(event.target)) {
+                mobileAiDropdown.classList.remove('show');
+            }
+        });
+
+        ['mobileCraftEmail', 'mobileCraftSMS', 'mobileCraftNote'].forEach(id => {
+            document.getElementById(id).addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log(`Mobile Craft ${id.replace('mobileCraft', '')}`);
+                mobileAiDropdown.classList.remove('show');
+            });
+        });
+
+        // Mobile Voice Command Button
+        const mobileVoiceCommandButton = document.getElementById('mobileVoiceCommandButton');
+        if (mobileVoiceCommandButton) {
+            mobileVoiceCommandButton.addEventListener('click', function() {
+                const voiceCommandModal = document.getElementById('voiceCommandModal');
+                if (voiceCommandModal) {
+                    voiceCommandModal.style.display = 'block';
+                }
+            });
+        }
+
+        // Mobile Search Button
+        const mobileSearchButton = document.getElementById('mobileSearchButton');
+        if (mobileSearchButton) {
+            mobileSearchButton.addEventListener('click', function() {
+                const searchContainer = document.getElementById('searchContainer');
+                if (searchContainer) {
+                    searchContainer.style.display = 'flex';
+                    document.getElementById('searchInput').focus();
+                }
+            });
+        }
+
+        // Mobile Chatbot Button
+        const mobileChatbotButton = document.getElementById('mobileChatbotButton');
+        if (mobileChatbotButton) {
+            mobileChatbotButton.addEventListener('click', function() {
+                const chatbotModal = document.getElementById('chatbotModal');
+                if (chatbotModal) {
+                    chatbotModal.style.display = 'block';
+                }
+            });
+        }
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const iconContainers = document.querySelectorAll('.ai-icon-container');
+        iconContainers.forEach(container => {
+            const tooltip = container.getAttribute('data-tooltip');
+            if (tooltip) {
+                container.setAttribute('title', tooltip);
+            }
+        });
+    });
+    </script>
+        <script defer type="module" src="emailTemplateAction.js"></script>
+</body>
+</html>
