@@ -18,3 +18,122 @@
 @import url('voice-command-modal.css');
 @import url('contactCard.css');
 
+/* Matchup Card Styles */
+.matchup-card {
+    background-color: #1e293b;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.matchup-card .teams-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.matchup-card .team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.matchup-card .team img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    border: 2px solid #38bdf8;
+}
+
+.matchup-card .team h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.matchup-card .vs-divider {
+    font-size: 24px;
+    color: #94a3b8;
+}
+
+/* Predictions Section */
+.matchup-card .predictions {
+    margin-bottom: 20px;
+}
+
+.matchup-card .bet {
+    background-color: #334155;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.matchup-card .bet-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Adjust spacing when logo is present */
+.matchup-card .bet-header img {
+    margin-right: 10px;
+}
+
+/* Adjust bet-name width */
+.matchup-card .bet-name {
+    font-size: 16px;
+    color: #94a3b8;
+    margin-right: 10px;
+    flex: 0 0 120px;
+}
+
+.matchup-card .predicted-team-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f8fafc;
+    margin-right: auto;
+}
+
+.matchup-card .toggle-icon {
+    font-size: 16px;
+    color: #38bdf8;
+    transition: transform 0.3s ease;
+}
+
+.matchup-card .bet-header .toggle-icon.expanded {
+    transform: rotate(90deg);
+    color: #38bdf8;
+}
+
+/* AI Analysis Content */
+.matchup-card .ai-analysis-content {
+    max-height: 0;
+    overflow: hidden;
+    background-color: #0f172a;
+    padding: 0 15px;
+    font-size: 14px;
+    color: #cbd5e1;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.matchup-card .ai-analysis-content.expanded {
+    max-height: 200px; /* Adjust based on expected content size */
+    padding: 15px;
+}
+
+.matchup-card .ai-analysis-content p {
+    margin: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .matchup-card .teams-section {
+        flex-direction: column;
+    }
+}

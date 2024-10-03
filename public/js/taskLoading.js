@@ -1,261 +1,270 @@
 export async function loadTasks() {
     try {
-        const response = await fetch('/fetch-tasks', { method: 'POST' });
+        const response = await fetch('/contacts', { method: 'GET' });
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        console.log('Fetched tasks:', data);
+        console.log('Fetched contacts and currentWeek:', data);
 
-        if (data && Array.isArray(data.tasks)) {
-            console.log("Tasks array is present, populating tasks.");
-            // Ensure contactId is properly set for each task
-            const processedTasks = data.tasks.map(task => ({
-                ...task,
-                contactId: task.contactDetails?.id || task.contactId
-            }));
-            populateTasks(processedTasks);
+        if (data && Array.isArray(data.contacts)) {
+            console.log("Contacts array is present, processing matchups.");
+
+            // Use the currentWeek from data
+            const currentWeek = data.currentWeek || 1; // Default to week 1 if not provided
+            populateMatchups(data.contacts, currentWeek);
         } else {
-            console.log('No tasks array to display', data);
+            console.log('No contacts array to display', data);
         }
     } catch (error) {
-        console.error('Failed to load tasks:', error);
-        alert('Failed to load tasks. Please try again.');
+        console.error('Failed to load contacts:', error);
+        alert('Failed to load contacts. Please try again.');
     }
 }
 
-function populateTasks(tasks) {
-    document.querySelectorAll('.task-list').forEach(e => e.innerHTML = ''); // Clear existing tasks
+function populateMatchups(contacts, currentWeek) {
+    // Clear existing matchups
+    document.querySelectorAll('.matchup-list').forEach(e => e.innerHTML = '');
 
-    const columns = {
-        'overdue': [], // Move overdue to the first position
-        'today': [],
-        'tomorrow': []
+    const matchupsColumn = document.getElementById('matchups');
+    if (!matchupsColumn) {
+        console.error("Matchups column not found in the DOM");
+        return;
+    }
+
+    console.log(`Updating matchups column for week ${currentWeek}`);
+
+    // Pair teams based on shared game IDs
+    const matchups = pairTeamsByGameId(contacts);
+    console.log(`Created ${matchups.length} matchups`);
+
+    // Create and append matchup elements
+    matchups.forEach((matchup, index) => {
+        const matchupElement = createMatchupElement(matchup);
+        console.log(`Appending matchup ${index + 1}:`, matchupElement);
+        matchupsColumn.querySelector('.matchup-list').appendChild(matchupElement);
+    });
+
+    // Update matchup count and current week after appending matchups
+    const columnTitle = document.querySelector('.column-title');
+    if (columnTitle) {
+        const currentWeekSpan = columnTitle.querySelector('#currentWeekDisplay');
+        if (currentWeekSpan) {
+            currentWeekSpan.textContent = currentWeek;
+        }
+        const matchupCountSpan = columnTitle.querySelector('.matchup-count');
+        if (matchupCountSpan) {
+            matchupCountSpan.textContent = `(${matchups.length})`;
+            console.log(`Updated matchup count: ${matchups.length}`);
+        } else {
+            console.log(`Matchup count span not found`);
+        }
+    } else {
+        console.log(`Column title not found`);
+    }
+}
+
+function pairTeamsByGameId(contacts) {
+    const gameIdMap = {};
+
+    // Group teams by gameId
+    contacts.forEach(contact => {
+        let gameId = null;
+        // Look for a field that contains 'Game ID'
+        for (let key in contact) {
+            if (key.toLowerCase().includes('game id')) {
+                gameId = contact[key];
+                break;
+            }
+        }
+        
+        if (!gameId) {
+            console.warn('No Game ID found for contact:', contact);
+            return; // Skip contacts without a gameId
+        }
+        
+        if (!gameIdMap[gameId]) {
+            gameIdMap[gameId] = [];
+        }
+        gameIdMap[gameId].push(contact);
+    });
+
+    // Create matchups
+    const matchups = [];
+    Object.keys(gameIdMap).forEach(gameId => {
+        const teams = gameIdMap[gameId];
+        if (teams.length >= 2) {
+            // Pair teams (taking the first two for simplicity)
+            matchups.push({ homeTeam: teams[0], awayTeam: teams[1], gameId });
+        } else {
+            console.warn(`Game ID ${gameId} has less than two teams.`);
+        }
+    });
+
+    console.log('Created matchups:', matchups);
+    return matchups;
+}
+
+function createMatchupElement(matchup) {
+    console.log('Creating matchup element for:', matchup);
+
+    const matchupElement = document.createElement('div');
+    matchupElement.className = 'matchup-card';
+    matchupElement.dataset.gameId = matchup.gameId;
+
+    // Teams Section
+    const teamsSection = document.createElement('div');
+    teamsSection.className = 'teams-section';
+
+    // Home Team
+    const homeTeamElement = document.createElement('div');
+    homeTeamElement.className = 'team home-team';
+
+    const homeTeamLogo = document.createElement('img');
+    homeTeamLogo.src = matchup.homeTeam['1HGwmpbWMR6WayDWOL2k'] || 'default-logo.png';
+    homeTeamLogo.alt = `${capitalizeWords(matchup.homeTeam.firstName)} ${capitalizeWords(matchup.homeTeam.lastName)} Logo`;
+
+    const homeTeamName = document.createElement('h3');
+    homeTeamName.textContent = `${capitalizeWords(matchup.homeTeam.firstName)} ${capitalizeWords(matchup.homeTeam.lastName)}`.trim();
+
+    homeTeamElement.appendChild(homeTeamLogo);
+    homeTeamElement.appendChild(homeTeamName);
+
+    // VS Divider
+    const vsElement = document.createElement('div');
+    vsElement.className = 'vs-divider';
+    vsElement.textContent = 'VS';
+
+    // Away Team
+    const awayTeamElement = document.createElement('div');
+    awayTeamElement.className = 'team away-team';
+
+    const awayTeamLogo = document.createElement('img');
+    awayTeamLogo.src = matchup.awayTeam['1HGwmpbWMR6WayDWOL2k'] || 'default-logo.png';
+    awayTeamLogo.alt = `${capitalizeWords(matchup.awayTeam.firstName)} ${capitalizeWords(matchup.awayTeam.lastName)} Logo`;
+
+    const awayTeamName = document.createElement('h3');
+    awayTeamName.textContent = `${capitalizeWords(matchup.awayTeam.firstName)} ${capitalizeWords(matchup.awayTeam.lastName)}`.trim();
+
+    awayTeamElement.appendChild(awayTeamLogo);
+    awayTeamElement.appendChild(awayTeamName);
+
+    // Append teams to teams section
+    teamsSection.appendChild(homeTeamElement);
+    teamsSection.appendChild(vsElement);
+    teamsSection.appendChild(awayTeamElement);
+
+    // Predictions Section
+    const predictionsElement = document.createElement('div');
+    predictionsElement.className = 'predictions';
+
+    // Map bet types to custom field IDs
+    const betFields = {
+        'Money Line': {
+            prediction: 'YF25I3Il2JYGtS9JgAj9',
+            analysis: 'NZXLW5RidU4aksVSbdqR',
+            displayLogo: true
+        },
+        'Over/Under': {
+            prediction: 'NpuHYX07yhYmnrjnLDoE',
+            analysis: 'q79t8P5LeWHDVXwj3bhq',
+            displayLogo: false
+        },
+        'Odd/Even': {
+            prediction: 'FddrXpUW3dpZMO9X3L0V',
+            analysis: 'lmCzsBAIDCkSyUEI72lH',
+            displayLogo: false
+        },
+        'Point Spread': {
+            prediction: 'JW73SrCJuNOEaDv7A0M6',
+            analysis: 'k3AfDCc0VJ6wkww8TnEq',
+            displayLogo: false
+        },
+        'Total Points': {
+            prediction: 'PwJ3c8va8iAaOTB5sI8o',
+            analysis: 'D7fPSRSVfhFpkNoJNZhV',
+            displayLogo: false
+        }
     };
 
-    tasks.forEach(task => {
-        const columnId = determineColumnForTask(task);
-        if (columnId) {
-            columns[columnId].push(task);
+    Object.keys(betFields).forEach(betType => {
+        const betInfo = betFields[betType];
+
+        // Create Bet Element
+        const betElement = document.createElement('div');
+        betElement.className = 'bet';
+
+        // Bet Header
+        const betHeader = document.createElement('div');
+        betHeader.className = 'bet-header';
+
+        const betName = document.createElement('div');
+        betName.className = 'bet-name';
+        betName.textContent = betType;
+
+        // Predicted Value
+        const predictedValue = matchup.homeTeam[betInfo.prediction] || 'N/A'; // Using homeTeam's data
+
+        const predictedTeamName = document.createElement('div');
+        predictedTeamName.className = 'predicted-team-name';
+        predictedTeamName.textContent = predictedValue;
+
+        // Only display logo for Money Line
+        if (betInfo.displayLogo && (predictedValue === 'Home Team' || predictedValue === 'Away Team')) {
+            const predictedTeamLogo = document.createElement('img');
+            if (predictedValue === 'Home Team') {
+                predictedTeamLogo.src = homeTeamLogo.src;
+            } else {
+                predictedTeamLogo.src = awayTeamLogo.src;
+            }
+            predictedTeamLogo.alt = 'Predicted Team Logo';
+            betHeader.appendChild(predictedTeamLogo);
         }
-    });
 
-    console.log('Tasks sorted into columns:', columns);
+        // Expand/Collapse Icon
+        const toggleIcon = document.createElement('span');
+        toggleIcon.className = 'toggle-icon';
+        toggleIcon.innerHTML = '&#9654;'; // Right-pointing arrow
 
-    // Update the order of processing
-    const columnOrder = ['overdue', 'today', 'tomorrow'];
-    
-    for (const columnId of columnOrder) {
-        const tasksInColumn = columns[columnId];
-        console.log(`Updating column: ${columnId} with ${tasksInColumn.length} tasks`);
-        const sortOrder = columnId === 'overdue' ? 'asc' : 'asc';
-        const sortedTasks = sortTasks(tasksInColumn, sortOrder);
-        
-        // Create and append task elements
-        sortedTasks.forEach(task => {
-            const taskElement = createTaskElement(task);
-            console.log(`Appending task to ${columnId}:`, taskElement);
-            document.getElementById(columnId)?.querySelector('.task-list').appendChild(taskElement);
+        // Append elements to bet header
+        betHeader.appendChild(betName);
+        betHeader.appendChild(predictedTeamName);
+        betHeader.appendChild(toggleIcon);
+
+        // AI Analysis Content
+        const aiAnalysisContent = document.createElement('div');
+        aiAnalysisContent.className = 'ai-analysis-content';
+        aiAnalysisContent.textContent = matchup.homeTeam[betInfo.analysis] || 'No analysis available.';
+
+        // Event Listener for Expand/Collapse
+        betHeader.addEventListener('click', () => {
+            aiAnalysisContent.classList.toggle('expanded');
+            toggleIcon.innerHTML = aiAnalysisContent.classList.contains('expanded') ? '&#9660;' : '&#9654;'; // Toggle between down and right arrow
         });
 
-        // Update task count after appending tasks
-        const columnTitle = document.querySelector(`.column-title[data-title*="${columnId.charAt(0).toUpperCase() + columnId.slice(1)}"]`);
-        if (columnTitle) {
-            const taskCountSpan = columnTitle.querySelector('.task-count');
-            if (taskCountSpan) {
-                console.log(`Updating count for ${columnId}:`, {
-                    columnTitle: !!columnTitle,
-                    taskCountSpan: !!taskCountSpan,
-                    tasksCount: tasksInColumn.length
-                });
-                taskCountSpan.textContent = `(${tasksInColumn.length})`;
-                console.log(`Updated task count for ${columnId}: ${tasksInColumn.length}`);
-            } else {
-                console.log(`Task count span not found for ${columnId}`);
-            }
-        } else {
-            console.log(`Column title not found for ${columnId}`);
-        }
-    }
-}
+        betElement.appendChild(betHeader);
+        betElement.appendChild(aiAnalysisContent);
 
-function determineColumnForTask(task) {
-    if (isToday(task.dueDate)) {
-        return 'today';
-    } else if (isTomorrow(task.dueDate)) {
-        return 'tomorrow';
-    } else if (isOverdue(task.dueDate)) {
-        return 'overdue';
-    }
-    return null;
-}
-
-function sortTasks(tasks, order = 'asc') {
-    return tasks.sort((a, b) => {
-        let dateA = new Date(a.dueDate);
-        let dateB = new Date(b.dueDate);
-        return order === 'asc' ? dateA - dateB : dateB - dateA;
+        predictionsElement.appendChild(betElement);
     });
+
+    // Assemble the matchup card
+    matchupElement.appendChild(teamsSection);
+    matchupElement.appendChild(predictionsElement);
+
+    // Add click event to expand/collapse predictions
+    matchupElement.addEventListener('click', (event) => {
+        if (!event.target.closest('.bet-header')) {
+            predictionsElement.classList.toggle('expanded');
+        }
+    });
+
+    return matchupElement;
 }
 
-export function createTaskElement(task) {
-    console.log('Creating task element for task:', task);
-
-    const taskElement = document.createElement('div');
-    taskElement.className = 'task';
-    taskElement.dataset.taskId = task._id || task.taskId; // Use _id if available, fallback to id
-    taskElement.dataset.contactId = task.contactDetails?.id || task.contactId;
-    
-    const aiButton = document.createElement('button');
-    aiButton.className = 'ai-button';
-    aiButton.innerHTML = '<i class="fas fa-robot"></i>'; // AI/Robot icon
-    taskElement.appendChild(aiButton);
-
-    const titleElement = document.createElement('h3');
-    titleElement.textContent = task.title;
-    taskElement.appendChild(titleElement);
-
-    const contactElement = document.createElement('p');
-    const contactFirstName = task.contactDetails?.firstName ? capitalizeFirstLetter(task.contactDetails.firstName) : '';
-    const contactLastName = task.contactDetails?.lastName ? capitalizeFirstLetter(task.contactDetails.lastName) : '';
-    contactElement.textContent = `Contact: ${contactFirstName} ${contactLastName}`.trim();
-    taskElement.appendChild(contactElement);
-
-    const dueDateElement = document.createElement('p');
-    dueDateElement.textContent = `Due Date: ${new Date(task.dueDate).toLocaleDateString()}`;
-    taskElement.appendChild(dueDateElement);
-
-    const bodyElement = document.createElement('p');
-    bodyElement.textContent = `Description: ${task.body}`;
-    bodyElement.style.display = 'none'; // Hide the description
-    taskElement.appendChild(bodyElement);
-
-    const taskIdElement = document.createElement('p');
-    taskIdElement.className = 'task-id';
-    taskIdElement.textContent = `Task ID: ${task._id || task.id}`; // Use _id if available, fallback to id
-    taskIdElement.style.display = 'none'; // Hide this element
-    taskElement.appendChild(taskIdElement);
-
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'task-buttons';
-
-    const editButton = document.createElement('button');
-    editButton.className = 'edit-button';
-    editButton.innerHTML = '<i class="fas fa-edit"></i>'; // Edit icon
-    buttonContainer.appendChild(editButton);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.className = 'delete-button';
-    deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>'; // Delete icon
-    buttonContainer.appendChild(deleteButton);
-
-    const completeButton = document.createElement('button');
-    completeButton.className = 'complete-button';
-    completeButton.innerHTML = '<i class="fas fa-check-circle"></i>'; // Complete icon
-    buttonContainer.appendChild(completeButton);
-
-    const contactButton = document.createElement('button');
-    contactButton.className = 'contact-button';
-    contactButton.innerHTML = '<i class="fas fa-user"></i>'; // Contact icon
-    buttonContainer.appendChild(contactButton);
-
-    const emailTemplateButton = document.createElement('button');
-    emailTemplateButton.className = 'email-template-button';
-    emailTemplateButton.innerHTML = '<i class="fas fa-bolt"></i>'; // Lightning bolt icon
-    buttonContainer.appendChild(emailTemplateButton);
-
-    taskElement.appendChild(buttonContainer);
-
-    return taskElement;
+// Helper function to capitalize each word in a string
+function capitalizeWords(str) {
+    return str.replace(/\b\w/g, l => l.toUpperCase());
 }
 
-export function createContactCardTaskElement(task) {
-    console.log('Creating contact card task element for task:', task);
-
-    const taskElement = document.createElement('div');
-    taskElement.className = 'task contact-card-task';
-    taskElement.dataset.taskId = task.id;
-    taskElement.dataset.contactId = task.contactId;
-
-    const titleElement = document.createElement('h3');
-    titleElement.textContent = task.title || 'Untitled Task';
-    taskElement.appendChild(titleElement);
-
-    const contactElement = document.createElement('p');
-    contactElement.className = 'contact-name';
-    // Use the contact name from the task data or from the contact details
-    const firstName = capitalizeFirstLetter(task.contactDetails?.firstName || task.contactFirstName || '');
-    const lastName = capitalizeFirstLetter(task.contactDetails?.lastName || task.contactLastName || '');
-    const contactName = task.contactName ? 
-        task.contactName.split(' ').map(capitalizeFirstLetter).join(' ') : 
-        `${firstName} ${lastName}`.trim();
-    contactElement.textContent = `Contact: ${contactName}`;
-    taskElement.appendChild(contactElement);
-
-    const dueDateElement = document.createElement('p');
-    dueDateElement.textContent = `Due Date: ${task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Not set'}`;
-    taskElement.appendChild(dueDateElement);
-
-    const bodyElement = document.createElement('p');
-    bodyElement.textContent = `Description: ${task.body || 'No description'}`;
-    taskElement.appendChild(bodyElement);
-
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'task-buttons';
-
-    const aiButton = document.createElement('button');
-    aiButton.className = 'contact-card-ai-button';
-    aiButton.innerHTML = '<i class="fas fa-robot"></i>'; // AI/Robot icon
-    buttonContainer.appendChild(aiButton);
-
-    const editButton = document.createElement('button');
-    editButton.className = 'contact-card-edit-button';
-    editButton.innerHTML = '<i class="fas fa-edit"></i>'; // Edit icon
-    buttonContainer.appendChild(editButton);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.className = 'contact-card-delete-button';
-    deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>'; // Delete icon
-    buttonContainer.appendChild(deleteButton);
-
-    const completeButton = document.createElement('button');
-    completeButton.className = 'contact-card-complete-button';
-    completeButton.innerHTML = '<i class="fas fa-check-circle"></i>'; // Complete icon
-    buttonContainer.appendChild(completeButton);
-
-    const contactButton = document.createElement('button');
-    contactButton.className = 'contact-card-contact-button';
-    contactButton.innerHTML = '<i class="fas fa-user"></i>'; // Contact icon
-    buttonContainer.appendChild(contactButton);
-
-    const emailTemplateButton = document.createElement('button');
-    emailTemplateButton.className = 'contact-card-email-template-button';
-    emailTemplateButton.innerHTML = '<i class="fas fa-bolt"></i>'; // Lightning bolt icon
-    buttonContainer.appendChild(emailTemplateButton);
-
-    taskElement.appendChild(buttonContainer);
-
-    return taskElement;
-}
-
-function capitalizeFirstLetter(string) {
-    if (!string) return '';
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
-
-function isToday(date) {
-    const today = new Date();
-    const taskDate = new Date(date);
-    return today.toDateString() === taskDate.toDateString();
-}
-
-function isTomorrow(date) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const taskDate = new Date(date);
-    return tomorrow.toDateString() === taskDate.toDateString();
-}
-
-function isOverdue(date) {
-    const today = new Date();
-    const taskDate = new Date(date);
-    return taskDate < today && !isToday(date);
+export function createContactCardTaskElement(contact) {
+    // ... implementation ...
 }

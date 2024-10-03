@@ -1,69 +1,121 @@
+body {
+    background-color: #0c1824;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
 .dashboard {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.column-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #ffffff;
+}
+
+.matchup-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.matchup-card {
+    background-color: #1a2a3a;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.matchup-card:hover {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.teams-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.team {
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.team img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 0.5rem;
+}
+
+.team h3 {
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0;
+}
+
+.vs-divider {
+    font-size: 1.2rem;
+    color: #a0a0a0;
+}
+
+.predictions {
+    display: none;
     padding: 1rem;
-    width: 100%;
-    background-color: var(--primary-bg);
-    color: var(--text-color);
+    background-color: #243b53;
 }
 
-.column {
-    width: 100%;
-    background-color: var(--secondary-bg);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    margin-bottom: 1rem;
+.predictions.expanded {
+    display: block;
 }
 
-.column h2 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+.bet {
+    margin-bottom: 0.5rem;
 }
 
-.task-count {
-    font-size: 1rem;
-    padding: 0.25rem 0.5rem;
-    min-width: 24px;
+.bet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: #1a2a3a;
+    border-radius: 5px;
 }
 
-.task-list-container {
-    max-height: 500px;
-    overflow-y: auto;
+.bet-name {
+    color: #a0a0a0;
 }
 
-.task {
-    padding: 1rem;
-    margin-bottom: 1rem;
+.predicted-team-name {
+    font-weight: bold;
 }
 
-.task h3 {
-    font-size: 1rem;
+.toggle-icon {
+    margin-left: 0.5rem;
+    color: #4a90e2;
 }
 
-@media screen and (min-width: 768px) {
-    .dashboard {
-        flex-direction: row;
-        justify-content: space-around;
-        padding: 2rem;
-    }
-
-    .column {
-        width: 30%;
-        margin-bottom: 0;
-    }
-
-    .task-list-container {
-        max-height: 800px;
-    }
+.ai-analysis-content {
+    display: none;
+    padding: 0.5rem;
+    background-color: #243b53;
+    border-radius: 0 0 5px 5px;
+    font-size: 0.9rem;
 }
 
-@media screen and (min-width: 1024px) {
-    .column h2 {
-        font-size: 1.5rem;
-    }
+.ai-analysis-content.expanded {
+    display: block;
+}
 
-    .task h3 {
-        font-size: 1.125rem;
+@media screen and (max-width: 768px) {
+    .matchup-list-container {
+        grid-template-columns: 1fr;
     }
 }

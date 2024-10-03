@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Dashboard</title>
+    <title>StrategixAI Bets</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="https://storage.googleapis.com/msgsndr/8lQAYS7QatKYV3ENYdl1/media/669d8f3afe542b7be0510dac.png" type="image/png">
@@ -31,8 +31,8 @@
         <header class="main-header">
             <div class="header desktop-header">
                 <h1 class="dashboard-title">
-                    <span class="tech-text">Task</span>
-                    <span class="modern-text">Dashboard</span>
+                    <span class="tech-text">StrategixAI</span>
+                    <span class="modern-text">Bets</span>
                 </h1>
                 <div class="header-buttons">
                     <button id="addTaskBtn" class="add-task-button">Add Task</button>
@@ -71,8 +71,8 @@
             </div>
             <div class="header mobile-header">
                 <h1 class="dashboard-title">
-                    <span class="tech-text">Task</span>
-                    <span class="modern-text">Dashboard</span>
+                    <span class="tech-text">StrategixAI</span>
+                    <span class="modern-text">Bets</span>
                 </h1>
                 <div class="mobile-buttons">
                     <button id="mobileMenuBtn" class="mobile-menu-button">Menu</button>
@@ -117,21 +117,12 @@
             <div id="loadingIndicator" class="loading-indicator" style="display:none;">Loading...</div>
             <div class="dashboard">
                 <div class="column">
-                    <h2 class="column-title" data-title="Overdue">Overdue <span class="task-count"></span></h2>
-                    <div class="task-list-container" id="overdue">
-                        <div class="task-list"></div>
-                    </div>
-                </div>
-                <div class="column">
-                    <h2 class="column-title" data-title="Today's Tasks">Today's Tasks <span class="task-count"></span></h2>
-                    <div class="task-list-container" id="today">
-                        <div class="task-list"></div>
-                    </div>
-                </div>
-                <div class="column">
-                    <h2 class="column-title" data-title="Tomorrow's Tasks">Tomorrow's Tasks <span class="task-count"></span></h2>
-                    <div class="task-list-container" id="tomorrow">
-                        <div class="task-list"></div>
+                    <h2 class="column-title" data-title="Week Matchups">
+                        Week <span id="currentWeekDisplay">1</span> Matchups
+                        <span class="matchup-count"></span>
+                    </h2>
+                    <div class="matchup-list-container" id="matchups">
+                        <div class="matchup-list"></div>
                     </div>
                 </div>
             </div>
@@ -313,45 +304,15 @@
     document.addEventListener('DOMContentLoaded', function() {
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
-        const mobileAddTaskBtn = document.getElementById('mobileAddTaskBtn');
-        const mobileAddContactBtn = document.getElementById('mobileAddContactBtn');
-        const mobileAiActionBtn = document.getElementById('mobileAiActionBtn');
-        const mobileAiDropdown = document.getElementById('mobileAiDropdown');
 
         mobileMenuBtn.addEventListener('click', function() {
             mobileMenu.classList.toggle('active');
-        });
-
-        mobileAddTaskBtn.addEventListener('click', function() {
-            document.getElementById('addTaskBtn').click();
-            mobileMenu.classList.remove('active');
-        });
-
-        mobileAddContactBtn.addEventListener('click', function() {
-            document.getElementById('addContactBtn').click();
-            mobileMenu.classList.remove('active');
-        });
-
-        mobileAiActionBtn.addEventListener('click', function(event) {
-            event.stopPropagation();
-            mobileAiDropdown.classList.toggle('show');
         });
 
         document.addEventListener('click', function(event) {
             if (!mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
                 mobileMenu.classList.remove('active');
             }
-            if (!mobileAiActionBtn.contains(event.target) && !mobileAiDropdown.contains(event.target)) {
-                mobileAiDropdown.classList.remove('show');
-            }
-        });
-
-        ['mobileCraftEmail', 'mobileCraftSMS', 'mobileCraftNote'].forEach(id => {
-            document.getElementById(id).addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log(`Mobile Craft ${id.replace('mobileCraft', '')}`);
-                mobileAiDropdown.classList.remove('show');
-            });
         });
 
         // Mobile Voice Command Button
@@ -403,3 +364,5 @@
         <script defer type="module" src="emailTemplateAction.js"></script>
 </body>
 </html>
+```
+</rewritten_file>
