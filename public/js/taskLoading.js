@@ -9,7 +9,7 @@ export async function loadTasks() {
             console.log("Contacts array is present, processing matchups.");
 
             // Use the currentWeek from data
-            const currentWeek = data.currentWeek || 1; // Default to week 1 if not provided
+            const currentWeek = data.currentWeek || 3; // Default to week 1 if not provided
             populateMatchups(data.contacts, currentWeek);
         } else {
             console.log('No contacts array to display', data);
@@ -24,13 +24,13 @@ function populateMatchups(contacts, currentWeek) {
     // Clear existing matchups
     document.querySelectorAll('.matchup-list').forEach(e => e.innerHTML = '');
 
-    const matchupsColumn = document.getElementById('matchups');
-    if (!matchupsColumn) {
-        console.error("Matchups column not found in the DOM");
+    const matchupsContainer = document.querySelector('.matchup-list-container');
+    if (!matchupsContainer) {
+        console.error("Matchups container not found in the DOM");
         return;
     }
 
-    console.log(`Updating matchups column for week ${currentWeek}`);
+    console.log(`Updating matchups for week ${currentWeek}`);
 
     // Pair teams based on shared game IDs
     const matchups = pairTeamsByGameId(contacts);
@@ -40,7 +40,7 @@ function populateMatchups(contacts, currentWeek) {
     matchups.forEach((matchup, index) => {
         const matchupElement = createMatchupElement(matchup);
         console.log(`Appending matchup ${index + 1}:`, matchupElement);
-        matchupsColumn.querySelector('.matchup-list').appendChild(matchupElement);
+        matchupsContainer.appendChild(matchupElement);
     });
 
     // Update matchup count and current week after appending matchups
@@ -67,20 +67,14 @@ function pairTeamsByGameId(contacts) {
 
     // Group teams by gameId
     contacts.forEach(contact => {
-        let gameId = null;
-        // Look for a field that contains 'Game ID'
-        for (let key in contact) {
-            if (key.toLowerCase().includes('game id')) {
-                gameId = contact[key];
-                break;
-            }
-        }
-        
+        // Directly access the 'Game ID' field
+        let gameId = contact['Game ID'];
+
         if (!gameId) {
             console.warn('No Game ID found for contact:', contact);
-            return; // Skip contacts without a gameId
+            return; // Skip contacts without a Game ID
         }
-        
+
         if (!gameIdMap[gameId]) {
             gameIdMap[gameId] = [];
         }

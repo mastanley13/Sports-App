@@ -29,7 +29,7 @@ export function initializeContactCard() {
         const leftHalf = document.createElement('div');
         leftHalf.className = 'modal-half left-half';
         leftHalf.innerHTML = `
-            <h2>Contact Information</h2>
+            <h2>Team Information</h2>
             <div id="contactInfo"></div>
         `;
         modalContent.appendChild(leftHalf);
@@ -88,13 +88,204 @@ export function initializeContactCard() {
 
     function populateContactInfo(contact) {
         const contactInfoContainer = document.getElementById('contactInfo');
-        contactInfoContainer.innerHTML = `
-            <p><strong>First Name:</strong> ${capitalizeFirstLetter(contact.firstName)}</p>
-            <p><strong>Last Name:</strong> ${capitalizeFirstLetter(contact.lastName)}</p>
-            <p><strong>Email:</strong> ${contact.email || 'N/A'}</p>
-            <p><strong>Phone:</strong> ${contact.phone || 'N/A'}</p>
-            <p><strong>Contact Roles:</strong> ${contact.contactRoles ? contact.contactRoles.join(', ') : 'N/A'}</p>
-        `;
+        contactInfoContainer.innerHTML = '';
+
+        // Custom field mapping provided
+        const customFieldMap = {
+            "MhHsChdQoey1L8TSIygX": "Team Name",
+            "FDp1eP7up1cxt28TNlVk": "Points Scored Per Game",
+            "vSIOypBC7x354IuJoPyF": "Points Allowed Per Game",
+            "u8Hna8TPSo2UrUnSk51m": "Turnover Differential",
+            "Fshz9Ym00JmhM2pikH0y": "Current Streak",
+            "8DFDSuBdPtpZdaVcHbD7": "Away Record",
+            "E0Z5PL1ofTnbtOIoyKA6": "Passing Yards Per Game",
+            "Yr4PfGn8V0OfS3ps1PwL": "Rushing Yards Per Game",
+            "LuK0OmzNw6nVBnhOnGmL": "Total Yards Per Game",
+            "Sm6fVvDAyHstihugRbHm": "Third Down Conversion Rate",
+            "Xd0cqFjEDoVVNyr07eF8": "Passing Yards Allowed Per Game",
+            "PvcHLCr5704ZzMTxxzm0": "Rushing Yards Allowed Per Game",
+            "TPHpCBeMxBRxrQVvKHU6": "Total Yards Allowed Per Game",
+            "EAU1vCH6xtWdwTPJWRmQ": "Sacks Per Game",
+            "9RNCFHszdcmD4HRRBxYL": "Interceptions Per Game",
+            "anoKZLx5l3bPT4KOtLfG": "Field Goal Success Rate",
+            "Kf8Do53SG7GMy23UGaFp": "Punt Return Average Yards",
+            "e0AAWKWURjtlb9YKp9Zm": "Kick Return Average Yards",
+            "8DMABwgRfaUNTCve0Ea8": "Red Zone Efficiency Offense",
+            "MbQ9rueDdL11kwun8nLi": "Red Zone Efficiency Defense",
+            "M1KQhgbt84alQIwJjeO2": "Penalties Per Game",
+            "f4wK2GbF0j46Z6X9w0sJ": "Time of Possession",
+            "X1tlHQ2Yi8ze7frD43gm": "Key Player Injuries",
+            "2grz1EWPToJ4qFb5g55v": "Recent Player Performance",
+            "5PprgY0piffkaBFlMMNW": "Current Season",
+            "4edX4DaScgBXUY2GuJcY": "League ID",
+            "6TWIObC2AlOLQA7NSh4v": "Team ID",
+            "b0wPMAyfFKBPTu5NIjYG": "Game ID",
+            "EajoC77xTDrRVD19OLg1": "Game Status",
+            "BUrlElNXrgEJnRlMI6Ao": "Odds",
+            "9cP6zFWAGKEPKOqkklgM": "Bet Type",
+            "F66bhMFSeKxyuiitTNnp": "Conference",
+            "SvRXBe3rYxpmPSQviFMJ": "Division",
+            "bNtC8up7PpVAhdVtxfsc": "Overall Standings",
+            "FcYDknkZE0TiERHQPMjr": "App Category",
+            "nLqxt6wz2d3ckqtwzMKN": "App Sub-Category",
+            "GMPuBVHRabH0z4LcJRFx": "Stadium/Location",
+            "1HGwmpbWMR6WayDWOL2k": "Logo",
+            "73neDmvUzB4SsUUqsKJl": "Current Week",
+            "c6BZd0gdgqGxlUdpxbEY": "Game Date",
+            "s9ucCtN8WpyedW7SZhuc": "Week 4 Game ID",
+            "YF25I3Il2JYGtS9JgAj9": "Money Line",
+            "NZXLW5RidU4aksVSbdqR": "Money Line Analysis",
+            "NpuHYX07yhYmnrjnLDoE": "Over/Under",
+            "q79t8P5LeWHDVXwj3bhq": "Over/Under Analysis",
+            "FddrXpUW3dpZMO9X3L0V": "Odd/Even",
+            "lmCzsBAIDCkSyUEI72lH": "Odd/Even Analysis",
+            "JW73SrCJuNOEaDv7A0M6": "Point Spread",
+            "k3AfDCc0VJ6wkww8TnEq": "Point Spread Analysis",
+            "PwJ3c8va8iAaOTB5sI8o": "Total Points",
+            "D7fPSRSVfhFpkNoJNZhV": "Total Points Analysis",
+            "7EDIg3NXvGCc9YrBgXTT": "Game Information",
+            "sKM1rj2IK1vqerIQud4W": "Win",
+            "ZMWt3J3WAVwsv99wTSWK": "Loss",
+            "mDulszN2dx3ihHnCWoc2": "Point Difference",
+            "6BSWdhobBP7v8dVoJT5D": "First Downs Total",
+            "HBkmGyRHQg5RcIlMzh12": "First Downs Passing",
+            "mH3EjKComVXMxBCpMPMe": "First Downs Rushing",
+            "JZqnYvoAqyTI6xq2i3DY": "First Downs From Penalties",
+            "EcKRH5HJHRF9PM02eyP7": "Third Down Efficiency",
+            "ljT6e8u712a2X7BACwt4": "Fourth Down Efficiency",
+            "sdbmuebdUoShp6O7DCcw": "Total Plays",
+            "faTxoswEjsJ6fvjEDx3W": "Total Yards",
+            "EyIx4Y1Mlij3U3RnyTJX": "Yards Per Play",
+            "drybRhMklEvmntYPjkDZ": "Total Drives",
+            "VEGtUtZPdHVmWuO98XVb": "Total Passing Yards",
+            "tbXPNJue0JeSCrPmgm7w": "Points Against",
+            "CpsxGFdiPiwvOhA18tc4": "Int Touchdowns",
+            "nAVdM9kN0v2lcwqkbrph": "Safeties",
+            "ZibbVgyNLX2os3F7yOD1": "Sacks",
+            "WcxMq4oR9aOmX47LS99J": "Fumbles Recovered",
+            "rMlaMWU6jZbVj4SzTEVe": "Interceptions Total",
+            "TFaQD4XyKDYgMTpqr5KN": "Possession Time",
+            "eAhwnGq23wzSgyrvlQ3B": "Interceptions",
+            "fl04yCnMsn1cYtnAfn8m": "Lost Fumbles",
+            "LyJgyHEnSUbXpumxupyX": "Total Turnovers",
+            "lKgsx6lIdgnOb1a8mWCn": "Penalties Yards",
+            "eigHDODNkZ6sWZQXQQUU": "Penalties Total",
+            "BkZlaqxJ7wMXbUK7fQqx": "Red Zone Made Att",
+            "YlSyHLuEeTmSHGcX4rqf": "Comp Att",
+            "yo9zUjpYxkwWbOVEQMlF": "Yards Per Pass",
+            "hAmobIWhC0BLd8z2mjOF": "Interceptions Thrown",
+            "zgNiuPndf08RTTbZCLFT": "Sacks Yards Lost",
+            "Ik3napjSmzs9FqJLsaJE": "Total Rushing Yards",
+            "Bynl6ZltuxUFbnUP63P5": "Rush Attempts",
+            "vL2D4BcYcCQ6An00MRPy": "Yards Per Rush",
+            "hNRu3wjEKMGQxNFCrMgL": "Wins",
+            "jejriwIIvcSKweI120MP": "Losses",
+            "Nfevxm5ELoCTtCwgOa8C": "Games Played"
+        };
+
+        // Function to capitalize each word
+        const capitalizeWords = (str) => {
+            return str.replace(/\b\w/g, char => char.toUpperCase());
+        };
+
+        // Function to format field values
+        const formatFieldValue = (key, value) => {
+            if (value === null || value === undefined || value === '') return 'N/A';
+            if (key.toLowerCase().includes('date')) {
+                return capitalizeWords(new Date(value).toLocaleString());
+            }
+            if (Array.isArray(value)) {
+                return capitalizeWords(value.join(', ') || 'N/A');
+            }
+            if (typeof value === 'object') {
+                return capitalizeWords(JSON.stringify(value));
+            }
+            return capitalizeWords(String(value));
+        };
+
+        // Exclude unnecessary fields
+        const excludeFields = ['id', 'attributions'];
+
+        // **Fields to exclude from display (custom field IDs)**
+        const excludeCustomFields = [
+            '4edX4DaScgBXUY2GuJcY', // League ID
+            '6TWIObC2AlOLQA7NSh4v', // Team ID
+            'FcYDknkZE0TiERHQPMjr', // App Category
+            'nLqxt6wz2d3ckqtwzMKN', // App Sub-Category
+            'b0wPMAyfFKBPTu5NIjYG'  // Game ID
+        ];
+
+        // Display custom fields
+        if (contact.customFields) {
+            const customFieldsSection = document.createElement('div');
+            // No heading, as per your request
+
+            // Handle logo display
+            let logoHandled = false;
+            if (Array.isArray(contact.customFields)) {
+                // If customFields is an array
+                for (const customField of contact.customFields) {
+                    const key = customField.id || customField.Id;
+                    const value = customField.value || customField.Value;
+
+                    // Handle logo display
+                    if (key === '1HGwmpbWMR6WayDWOL2k' && !logoHandled) {
+                        const logoElement = document.createElement('img');
+                        logoElement.src = value;
+                        logoElement.alt = 'Team Logo';
+                        logoElement.style.maxWidth = '100px';
+                        logoElement.style.maxHeight = '100px';
+                        customFieldsSection.appendChild(logoElement);
+                        logoHandled = true;
+                        continue;
+                    }
+
+                    // Skip fields that are in the excludeCustomFields array
+                    if (excludeCustomFields.includes(key)) {
+                        continue;
+                    }
+
+                    const fieldName = customFieldMap[key] || key;
+                    const fieldValue = formatFieldValue(key, value);
+
+                    const fieldElement = document.createElement('p');
+                    fieldElement.innerHTML = `<strong>${capitalizeWords(fieldName)}:</strong> ${fieldValue}`;
+                    customFieldsSection.appendChild(fieldElement);
+                }
+            } else if (typeof contact.customFields === 'object') {
+                // If customFields is an object
+                for (const [key, value] of Object.entries(contact.customFields)) {
+                    if (key === '1HGwmpbWMR6WayDWOL2k' && !logoHandled) {
+                        const logoElement = document.createElement('img');
+                        logoElement.src = value;
+                        logoElement.alt = 'Team Logo';
+                        logoElement.style.maxWidth = '100px';
+                        logoElement.style.maxHeight = '100px';
+                        customFieldsSection.appendChild(logoElement);
+                        logoHandled = true;
+                        continue;
+                    }
+
+                    if (excludeCustomFields.includes(key)) {
+                        continue;
+                    }
+
+                    const fieldName = customFieldMap[key] || key;
+                    const fieldValue = formatFieldValue(key, value);
+
+                    const fieldElement = document.createElement('p');
+                    fieldElement.innerHTML = `<strong>${capitalizeWords(fieldName)}:</strong> ${fieldValue}`;
+                    customFieldsSection.appendChild(fieldElement);
+                }
+            }
+            contactInfoContainer.appendChild(customFieldsSection);
+        }
+
+        // Ensure the modal is displayed
+        const modal = document.getElementById('contactCardModal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
     }
 
     function capitalizeFirstLetter(string) {

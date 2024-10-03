@@ -1,11 +1,14 @@
 body {
-    background-color: #0c1824;
+    background: linear-gradient(to bottom, #0c1824, #1a3a5c);
     color: white;
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
 }
 
 .dashboard {
-    padding: 2rem;
+    padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -15,31 +18,38 @@ body {
     text-align: center;
     margin-bottom: 2rem;
     color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .matchup-list-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
 }
 
 .matchup-card {
-    background-color: #1a2a3a;
-    border-radius: 10px;
+    flex: 0 0 calc(25% - 1.5rem);
+    background: linear-gradient(145deg, #1e3951, #152736);
+    border-radius: 15px;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s ease;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .matchup-card:hover {
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 255, 255, 0.2);
 }
 
 .teams-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 0.5rem 0;
 }
 
 .team {
@@ -52,22 +62,25 @@ body {
     width: 60px;
     height: 60px;
     margin-bottom: 0.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .team h3 {
     font-size: 0.9rem;
     text-align: center;
     margin: 0;
+    color: #e0e0e0;
 }
 
 .vs-divider {
     font-size: 1.2rem;
     color: #a0a0a0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .predictions {
     display: none;
-    padding: 1rem;
+    padding: 0.5rem;
     background-color: #243b53;
 }
 
@@ -107,15 +120,62 @@ body {
     padding: 0.5rem;
     background-color: #243b53;
     border-radius: 0 0 5px 5px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .ai-analysis-content.expanded {
     display: block;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 768px) {
     .matchup-list-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .column-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .team img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .team h3 {
+        font-size: 0.9rem;
+    }
+
+    .vs-divider {
+        font-size: 1.2rem;
+    }
+
+    .ai-analysis-content {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .matchup-list-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1200px) {
+    .matchup-card {
+        flex: 0 0 calc(33.333% - 1.5rem);
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .matchup-card {
+        flex: 0 0 calc(50% - 1.5rem);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .matchup-card {
+        flex: 0 0 100%;
     }
 }
