@@ -1,7 +1,7 @@
 {
     "baseUrl": "https://marketplace.gohighlevel.com",
     "tokenEndpoint": "https://services.leadconnectorhq.com/oauth/token",
-    "redirectUri": "http://localhost:3000/oauth/callback",
+    "redirectUri": "https://strategixprops.com/oauth/callback",
     "clientId": "662150aa6cbf0d330f500466-lvaadvzc",
     "clientSecret": "fd10fac6-10c1-411f-ada5-705a0dfb1675"
 }
