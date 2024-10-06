@@ -114,3 +114,19 @@ function formatResponseText(responseText) {
         .replace(/#(.*?)#/g, '<h2>$1</h2>') // Main headers
         .replace(/\n/g, '<br>'); // Line breaks
 }
+
+export function openMatchupChatWindow(matchup) {
+    console.log('Opening matchup chat window for matchup:', matchup);
+    const contactChatbotModal = document.getElementById('contactChatbotModal');
+    if (contactChatbotModal) {
+        contactChatbotModal.style.display = 'block';
+        // Set up the chat for the specific matchup
+        // For example, display the teams involved
+        const chatHeader = document.getElementById('chatHeader');
+        if (chatHeader) {
+            chatHeader.textContent = `${matchup.homeTeam.firstName} ${matchup.homeTeam.lastName} vs ${matchup.awayTeam.firstName} ${matchup.awayTeam.lastName}`;
+        }
+    } else {
+        console.error('Contact chatbot modal not found');
+    }
+}
