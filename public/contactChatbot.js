@@ -27,19 +27,7 @@ document.getElementById('contactChatForm').addEventListener('submit', async (eve
 
     if (userMessage) {
         // Display user's message
-        const userMessageElement = document.createElement('div');
-        userMessageElement.className = 'user-message';
-        userMessageElement.innerHTML = `<strong>You:</strong><br>${userMessage}`;
-        
-        const timestamp = document.createElement('div');
-        timestamp.className = 'message-timestamp';
-        timestamp.textContent = new Date().toLocaleTimeString();
-        userMessageElement.appendChild(timestamp);
-
-        chatHistory.appendChild(userMessageElement);
-
-        // Scroll to the bottom after adding user's message
-        chatHistory.scrollTop = chatHistory.scrollHeight;
+        displayMessage(chatHistory, 'You', userMessage);
 
         // Clear input
         chatInput.value = '';
@@ -51,26 +39,17 @@ document.getElementById('contactChatForm').addEventListener('submit', async (eve
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: userMessage, contactId: currentContactId }),
             });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const data = await response.json();
 
             if (data.content) {
-                // Format the response text
+                // Format and display chatbot's response
                 const formattedResponse = formatResponseText(data.content);
-
-                // Display chatbot's response
-                const botMessageElement = document.createElement('div');
-                botMessageElement.className = 'bot-message';
-                botMessageElement.innerHTML = `<strong>StrategixAI Assistant:</strong><br>${formattedResponse}`;
-                
-                const botTimestamp = document.createElement('div');
-                botTimestamp.className = 'message-timestamp';
-                botTimestamp.textContent = new Date().toLocaleTimeString();
-                botMessageElement.appendChild(botTimestamp);
-
-                chatHistory.appendChild(botMessageElement);
-
-                // Scroll to the bottom after adding bot's message
-                chatHistory.scrollTop = chatHistory.scrollHeight;
+                displayMessage(chatHistory, 'StrategixAI Assistant', formattedResponse);
             } else {
                 console.error('No content in response:', data);
                 alert('Failed to get a valid response from Contact Assistant.');
@@ -115,18 +94,65 @@ function formatResponseText(responseText) {
         .replace(/\n/g, '<br>'); // Line breaks
 }
 
-export function openMatchupChatWindow(matchup) {
+export async function openMatchupChatWindow(matchup) {
     console.log('Opening matchup chat window for matchup:', matchup);
     const contactChatbotModal = document.getElementById('contactChatbotModal');
     if (contactChatbotModal) {
         contactChatbotModal.style.display = 'block';
+        
         // Set up the chat for the specific matchup
-        // For example, display the teams involved
-        const chatHeader = document.getElementById('chatHeader');
-        if (chatHeader) {
-            chatHeader.textContent = `${matchup.homeTeam.firstName} ${matchup.homeTeam.lastName} vs ${matchup.awayTeam.firstName} ${matchup.awayTeam.lastName}`;
+        const chatHistory = document.getElementById('contactChatHistory');
+        chatHistory.innerHTML = ''; // Clear previous chat history
+        
+        try {
+            // Fetch contact information for both teams
+            const homeTeamResponse = await fetch(`/get-contact/${matchup.homeTeam.id}`);
+            const awayTeamResponse = await fetch(`/get-contact/${matchup.awayTeam.id}`);
+            
+            if (!homeTeamResponse.ok || !awayTeamResponse.ok) {
+                throw new Error('Failed to fetch contact information');
+            }
+            
+            const homeTeamData = await homeTeamResponse.json();
+            const awayTeamData = await awayTeamResponse.json();
+            
+            // Display matchup information
+            const matchupInfo = document.createElement('div');
+            matchupInfo.className = 'matchup-info';
+            matchupInfo.innerHTML = `
+                <h3>Matchup: ${homeTeamData.contact.firstName} ${homeTeamData.contact.lastName} vs ${awayTeamData.contact.firstName} ${awayTeamData.contact.lastName}</h3>
+                <p>Game ID: ${matchup.gameId}</p>
+            `;
+            chatHistory.appendChild(matchupInfo);
+
+            // Prepare initial message with both teams' information
+            const initialMessage = `Please provide analysis for the matchup between ${homeTeamData.contact.firstName} ${homeTeamData.contact.lastName} and ${awayTeamData.contact.firstName} ${awayTeamData.contact.lastName}. Home team notes: ${JSON.stringify(homeTeamData.notes)}. Away team notes: ${JSON.stringify(awayTeamData.notes)}.`;
+            document.getElementById('contactChatInput').value = initialMessage;
+            
+            // Store the matchup data for future use
+            currentContactId = { homeTeam: matchup.homeTeam.id, awayTeam: matchup.awayTeam.id };
+            
+            // Optionally, you can automatically send this initial message
+            // document.getElementById('contactChatForm').dispatchEvent(new Event('submit'));
+        } catch (error) {
+            console.error('Error fetching contact information:', error);
+            chatHistory.innerHTML = '<p>Error: Failed to load matchup information</p>';
         }
     } else {
         console.error('Contact chatbot modal not found');
     }
+}
+
+function displayMessage(chatHistory, sender, message) {
+    const messageElement = document.createElement('div');
+    messageElement.className = sender === 'You' ? 'user-message' : 'bot-message';
+    messageElement.innerHTML = `<strong>${sender}:</strong><br>${message}`;
+    
+    const timestamp = document.createElement('div');
+    timestamp.className = 'message-timestamp';
+    timestamp.textContent = new Date().toLocaleTimeString();
+    messageElement.appendChild(timestamp);
+
+    chatHistory.appendChild(messageElement);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
 }

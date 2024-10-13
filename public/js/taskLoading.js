@@ -1,3 +1,5 @@
+import { openMatchupChatWindow } from '../contactChatbot.js';
+
 export async function loadTasks() {
     try {
         const response = await fetch('/contacts', { method: 'GET' });
@@ -140,6 +142,19 @@ function createMatchupElement(matchup) {
 
     awayTeamElement.appendChild(awayTeamLogo);
     awayTeamElement.appendChild(awayTeamName);
+
+    // Add AI Assistant Icon
+    const aiAssistantIcon = document.createElement('button');
+    aiAssistantIcon.className = 'ai-icon ai-assistant-icon';
+    aiAssistantIcon.innerHTML = '<i class="fas fa-robot"></i>';
+    aiAssistantIcon.setAttribute('data-tooltip', 'AIAssistant');
+    aiAssistantIcon.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent the matchup card from expanding
+        openMatchupChatWindow(matchup);
+    });
+
+    // Append AI Assistant Icon to teams section
+    teamsSection.appendChild(aiAssistantIcon);
 
     // Append teams to teams section
     teamsSection.appendChild(homeTeamElement);

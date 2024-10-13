@@ -24,6 +24,7 @@ const { handleVoiceCommand, createNewVoiceCommandThread } = require('./lib/voice
 const fetchTemplatesRouter = require('./lib/fetchTemplates');
 const { getTasks } = require('./lib/getTasks');
 const createContactRouter = require('./lib/createContact');
+const getContactRouter = require('./lib/getContact');
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -64,6 +65,7 @@ app.use(generateEmailRouter);
 app.use(generateSmsRouter);
 app.use('/api', fetchTemplatesRouter);
 app.use('/api', createContactRouter);
+app.use(getContactRouter);
 
 // Serve oauth_data.json statically
 app.use('/oauth_data.json', express.static(path.join(__dirname, 'oauth_data.json')));
@@ -102,15 +104,21 @@ app.post('/api/contact-chatbot', async (req, res) => {
     const { message, contactId } = req.body;
     try {
         console.log(`Received message: ${message}`);
-        console.log(`Fetching contact details for contactId: ${contactId}`);
+        console.log(`Fetching contact details for contactIds:`, contactId);
 
-        // Fetch contact details
-        const { data: contact, accessToken } = await getContact(contactId);
-        console.log(`Fetched contact details: ${JSON.stringify(contact)}`);
+        // Fetch contact details for both teams
+        const { data: homeTeam, accessToken: homeAccessToken } = await getContactRouter.getContact(contactId.homeTeam);
+        const { data: awayTeam, accessToken: awayAccessToken } = await getContactRouter.getContact(contactId.awayTeam);
 
-        // Fetch contact notes
-        const notes = await getNotes(contactId, accessToken);
-        console.log(`Fetched contact notes: ${JSON.stringify(notes)}`);
+        // Fetch contact notes for both teams
+        const homeTeamNotes = await getNotes(contactId.homeTeam, homeAccessToken);
+        const awayTeamNotes = await getNotes(contactId.awayTeam, awayAccessToken);
+
+        // Combine the information
+        const matchupInfo = {
+            homeTeam: { ...homeTeam, notes: homeTeamNotes },
+            awayTeam: { ...awayTeam, notes: awayTeamNotes }
+        };
 
         // Create a new thread if one doesn't exist
         if (!contactThreadId) {
@@ -124,7 +132,7 @@ app.post('/api/contact-chatbot', async (req, res) => {
         // Add messages to the thread
         await openai.beta.threads.messages.create(contactThreadId, {
             role: "user",
-            content: `System: You are a helpful assistant with access to contact information and notes. The JSON string of contact data and notes are important information about a contact, that the user will ask general questions about. Do not use 'id' strings in your response, only use the data in plain language. Bullet Point or outline answers are preferred, but not mandatory. You provide very detailed and formatted responses, allowing the user to understand the information. The JSON string is: ${JSON.stringify({ contact, notes })}`
+            content: `System: You are a helpful assistant with access to contact information and notes. The JSON string of contact data and notes are important information about a contact, that the user will ask general questions about. Do not use 'id' strings in your response, only use the data in plain language. Bullet Point or outline answers are preferred, but not mandatory. You provide very detailed and formatted responses, allowing the user to understand the information. The JSON string is: ${JSON.stringify(matchupInfo)}`
         });
 
         await openai.beta.threads.messages.create(contactThreadId, {

@@ -14,6 +14,7 @@ import './js/noteAction.js';
 import './js/smsAction.js';
 import './js/createContactForm.js';
 import { initializeContactCard } from './js/contactCard.js';
+import { openMatchupChatWindow } from './contactChatbot.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     console.log("DOM fully loaded and parsed");
