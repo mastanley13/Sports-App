@@ -28,9 +28,10 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Mobile-first styles */
 .matchup-card .teams-section {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
 }
@@ -39,6 +40,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 15px;
 }
 
 .matchup-card .team img {
@@ -51,13 +53,19 @@
 }
 
 .matchup-card .team h3 {
-    font-size: 18px;
+    font-size: 16px;
     margin: 0;
+    text-align: center;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .matchup-card .vs-divider {
     font-size: 24px;
     color: #94a3b8;
+    margin: 10px 0;
 }
 
 /* Predictions Section */
@@ -78,19 +86,18 @@
     align-items: center;
     padding: 10px;
     cursor: pointer;
+    flex-wrap: wrap;
 }
 
-/* Adjust spacing when logo is present */
 .matchup-card .bet-header img {
     margin-right: 10px;
 }
 
-/* Adjust bet-name width */
 .matchup-card .bet-name {
     font-size: 16px;
     color: #94a3b8;
     margin-right: 10px;
-    flex: 0 0 120px;
+    flex-shrink: 0;
 }
 
 .matchup-card .predicted-team-name {
@@ -98,17 +105,21 @@
     font-weight: 600;
     color: #f8fafc;
     margin-right: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .matchup-card .toggle-icon {
     font-size: 16px;
     color: #38bdf8;
     transition: transform 0.3s ease;
+    margin-left: 10px;
 }
 
-.matchup-card .bet-header .toggle-icon.expanded {
+/* Toggle icon when expanded */
+.matchup-card .toggle-icon.expanded {
     transform: rotate(90deg);
-    color: #38bdf8;
 }
 
 /* AI Analysis Content */
@@ -123,7 +134,7 @@
 }
 
 .matchup-card .ai-analysis-content.expanded {
-    max-height: 200px; /* Adjust based on expected content size */
+    max-height: 1000px; /* Increased to accommodate content */
     padding: 15px;
 }
 
@@ -131,9 +142,33 @@
     margin: 0;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
+/* Adjustments for larger screens */
+@media (min-width: 600px) {
     .matchup-card .teams-section {
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .matchup-card .team {
+        margin-bottom: 0;
+    }
+
+    .matchup-card .team h3 {
+        font-size: 18px;
+        max-width: none;
+        white-space: normal;
+    }
+
+    .matchup-card .bet-header {
+        flex-wrap: nowrap;
+    }
+
+    .matchup-card .bet-name,
+    .matchup-card .predicted-team-name {
+        font-size: 18px;
+    }
+
+    .matchup-card .toggle-icon {
+        font-size: 18px;
     }
 }

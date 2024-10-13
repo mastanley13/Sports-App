@@ -35,11 +35,12 @@
                     <span class="modern-text">Bets</span>
                 </h1>
                 <div class="header-buttons">
-                    <button id="addTaskBtn" class="add-task-button">Add Task</button>
+                    <button id="addTaskBtn" class="add-task-button" style="display: none;">Add Task</button>
                     <div class="dropdown">
-                        <button id="addContactBtn" class="add-contact-button">Add Contact</button>
+                        <button id="addContactBtn" class="add-contact-button" style="display: none;">Add Contact</button>
                     </div>
-                    <div class="dropdown">
+                    <!-- AI Actions dropdown in desktop header -->
+                    <div class="dropdown" style="display: none;">
                         <button id="aiAction" class="ai-action-button">AI Action</button>
                         <div id="aiDropdown" class="dropdown-content">
                             <strong>Have AI Craft Your...</strong>
@@ -96,10 +97,12 @@
                 </div>
             </div>
             <div id="mobileMenu" class="mobile-menu">
-                <button id="mobileAddTaskBtn" class="mobile-button">Add Task</button>
-                <button id="mobileAddContactBtn" class="mobile-button">Add Contact</button>
-                <button id="mobileAiActionBtn" class="mobile-button">AI Action</button>
-                <div id="mobileAiDropdown" class="mobile-dropdown-content">
+                <button id="mobileAddTaskBtn" class="mobile-button" style="display: none;">Add Task</button>
+                <button id="mobileAddContactBtn" class="mobile-button" style="display: none;">Add Contact</button>
+                <!-- AI Actions button in mobile menu -->
+                <button id="mobileAiActionBtn" class="mobile-button" style="display: none;">AI Action</button>
+                <!-- AI Actions dropdown in mobile menu -->
+                <div id="mobileAiDropdown" class="mobile-dropdown-content" style="display: none;">
                     <strong>Have AI Craft Your...</strong>
                     <ul>
                         <li><a href="#" id="mobileCraftEmail" class="craft-email">Email</a></li>
@@ -363,5 +366,4 @@
     </script>
         <script defer type="module" src="emailTemplateAction.js"></script>
 </body>
-</html>```
-</rewritten_file>
+</html>
