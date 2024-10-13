@@ -66,6 +66,19 @@ document.getElementById('clearContactChatBtn').addEventListener('click', async (
     const chatHistory = document.getElementById('contactChatHistory');
     chatHistory.innerHTML = ''; // Clear the chat history
 
+    // Remove existing conversation starters
+    const existingStarters = document.querySelector('.conversation-starters');
+    if (existingStarters) {
+        existingStarters.remove();
+    }
+
+    // Re-add conversation starters
+    const newStartersContainer = createConversationStarters();
+
+    // Insert the starters container before the chat form
+    const chatForm = document.getElementById('contactChatForm');
+    chatForm.parentNode.insertBefore(newStartersContainer, chatForm);
+
     try {
         // Send a request to create a new thread
         const response = await fetch('/api/contact-chatbot/new-thread', {
@@ -94,6 +107,49 @@ function formatResponseText(responseText) {
         .replace(/\n/g, '<br>'); // Line breaks
 }
 
+function createConversationStarters() {
+    const starters = [
+        "Give me a short analysis of the game prediction",
+        "Who's injured on each team?",
+        "What are the key matchups to watch?",
+        "What's the historical record between these teams?"
+    ];
+
+    const startersContainer = document.createElement('div');
+    startersContainer.className = 'conversation-starters collapsed';
+
+    const toggleButton = document.createElement('button');
+    toggleButton.className = 'starters-toggle';
+    toggleButton.textContent = 'Show Conversation Starters';
+    toggleButton.addEventListener('click', () => {
+        startersContainer.classList.toggle('collapsed');
+        toggleButton.textContent = startersContainer.classList.contains('collapsed') 
+            ? 'Show Conversation Starters' 
+            : 'Hide Conversation Starters';
+    });
+
+    const startersList = document.createElement('div');
+    startersList.className = 'starters-list';
+
+    starters.forEach(starter => {
+        const starterButton = document.createElement('button');
+        starterButton.className = 'starter-button';
+        starterButton.textContent = starter;
+        starterButton.addEventListener('click', () => {
+            document.getElementById('contactChatInput').value = starter;
+            document.getElementById('contactChatForm').dispatchEvent(new Event('submit'));
+            startersContainer.classList.add('collapsed');
+            toggleButton.textContent = 'Show Conversation Starters';
+        });
+        startersList.appendChild(starterButton);
+    });
+
+    startersContainer.appendChild(toggleButton);
+    startersContainer.appendChild(startersList);
+
+    return startersContainer;
+}
+
 export async function openMatchupChatWindow(matchup) {
     console.log('Opening matchup chat window for matchup:', matchup);
     const contactChatbotModal = document.getElementById('contactChatbotModal');
@@ -116,17 +172,25 @@ export async function openMatchupChatWindow(matchup) {
             const homeTeamData = await homeTeamResponse.json();
             const awayTeamData = await awayTeamResponse.json();
             
-            // Display matchup information
+            // Display matchup information with logos
             const matchupInfo = document.createElement('div');
             matchupInfo.className = 'matchup-info';
             matchupInfo.innerHTML = `
-                <h3>Matchup: ${homeTeamData.contact.firstName} ${homeTeamData.contact.lastName} vs ${awayTeamData.contact.firstName} ${awayTeamData.contact.lastName}</h3>
+                <div class="matchup-header">
+                    <div class="team-info">
+                        <img src="${matchup.homeTeam['1HGwmpbWMR6WayDWOL2k'] || 'default-logo.png'}" alt="${homeTeamData.contact.firstName} ${homeTeamData.contact.lastName} Logo" class="team-logo">
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="team-info">
+                        <img src="${matchup.awayTeam['1HGwmpbWMR6WayDWOL2k'] || 'default-logo.png'}" alt="${awayTeamData.contact.firstName} ${awayTeamData.contact.lastName} Logo" class="team-logo">
+                    </div>
+                </div>
                 <p>Game ID: ${matchup.gameId}</p>
             `;
             chatHistory.appendChild(matchupInfo);
 
             // Prepare initial message with both teams' information
-            const initialMessage = `Please provide analysis for the matchup between ${homeTeamData.contact.firstName} ${homeTeamData.contact.lastName} and ${awayTeamData.contact.firstName} ${awayTeamData.contact.lastName}. Home team notes: ${JSON.stringify(homeTeamData.notes)}. Away team notes: ${JSON.stringify(awayTeamData.notes)}.`;
+            const initialMessage = `Provide Analysis for this Game!`;
             document.getElementById('contactChatInput').value = initialMessage;
             
             // Store the matchup data for future use
@@ -134,6 +198,10 @@ export async function openMatchupChatWindow(matchup) {
             
             // Optionally, you can automatically send this initial message
             // document.getElementById('contactChatForm').dispatchEvent(new Event('submit'));
+
+            const chatForm = document.getElementById('contactChatForm');
+            const startersContainer = createConversationStarters();
+            chatForm.parentNode.insertBefore(startersContainer, chatForm);
         } catch (error) {
             console.error('Error fetching contact information:', error);
             chatHistory.innerHTML = '<p>Error: Failed to load matchup information</p>';
@@ -146,12 +214,20 @@ export async function openMatchupChatWindow(matchup) {
 function displayMessage(chatHistory, sender, message) {
     const messageElement = document.createElement('div');
     messageElement.className = sender === 'You' ? 'user-message' : 'bot-message';
-    messageElement.innerHTML = `<strong>${sender}:</strong><br>${message}`;
     
-    const timestamp = document.createElement('div');
-    timestamp.className = 'message-timestamp';
-    timestamp.textContent = new Date().toLocaleTimeString();
-    messageElement.appendChild(timestamp);
+    // Process the message content
+    let processedMessage = message
+        .replace(/^#\s*(.+)$/gm, '<strong>$1</strong>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/```[\s\S]*?```/g, match => `<pre>${match.slice(3, -3)}</pre>`)
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .split('\n\n').map(paragraph => `<p>${paragraph}</p>`).join('');
+
+    messageElement.innerHTML = `
+        <div class="message-content">${processedMessage}</div>
+        <div class="message-timestamp">${new Date().toLocaleTimeString()}</div>
+    `;
 
     chatHistory.appendChild(messageElement);
     chatHistory.scrollTop = chatHistory.scrollHeight;

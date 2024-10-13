@@ -189,15 +189,3 @@
 .ai-assistant-icon:hover {
     color: #0056b3;
 }
-
-.matchup-info {
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 15px;
-}
-
-.matchup-info h3 {
-    margin-top: 0;
-    color: #007bff;
-}
